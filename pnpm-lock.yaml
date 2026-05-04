@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@types/node':
+        specifier: ^18.19.68
+        version: 18.19.130
       commander:
         specifier: ^12.1.0
         version: 12.1.0
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
       zod:
         specifier: ^3.24.1
         version: 3.25.76
@@ -18,15 +24,9 @@ importers:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
-      '@types/node':
-        specifier: ^18.19.68
-        version: 18.19.130
       tsx:
         specifier: ^4.19.2
         version: 4.21.0
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
       vitest:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@18.19.130)
