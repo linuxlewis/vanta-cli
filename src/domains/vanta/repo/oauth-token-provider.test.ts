@@ -26,6 +26,7 @@ async function config(): Promise<VantaConfig> {
     scope: "vanta-api.all:read vanta-api.all:write",
     baseUrl: "https://api.vanta.test",
     tokenCachePath: join(dir, "oauth-token.json"),
+    credentialsFilePath: join(dir, "credentials.json"),
   };
 }
 

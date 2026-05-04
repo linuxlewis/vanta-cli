@@ -26,7 +26,9 @@ Vanta's public API deactivates test entities, not whole tests. This CLI therefor
 
 ## Boundary Rules
 
-- OAuth client credentials are read from CLI options or `VANTA_CLIENT_ID` and `VANTA_CLIENT_SECRET`.
+- OAuth client credentials are read from an MCP-style JSON file at `~/.config/vanta/credentials.json` by default.
+- The credentials file format is `{ "client_id": "...", "client_secret": "..." }`.
+- CLI options, `VANTA_CLIENT_ID`/`VANTA_CLIENT_SECRET`, and `VANTA_ENV_FILE` can override the default credentials file.
 - OAuth access tokens are requested with the client-credentials grant and cached on disk until shortly before expiration.
 - The API base URL defaults to `https://api.vanta.com`, with `--base-url` for testing or proxies.
 - Network responses are validated before entering service logic.

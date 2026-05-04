@@ -3,6 +3,7 @@
 ## Current Guarantees
 
 - Vanta API responses are parsed with Zod at the HTTP boundary.
+- The Vanta MCP-style credentials JSON file is parsed with Zod.
 - OAuth token responses and token cache files are parsed with Zod.
 - Deactivation tests use mocked fetch calls and do not contact Vanta.
 - `--dry-run` is covered by service tests and skips the POST request.

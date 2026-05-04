@@ -51,7 +51,11 @@ export function createVantaCli(dependencies: CliDependencies = {}): Command {
     )
     .option(
       "--token-cache-path <path>",
-      "OAuth access-token cache path; defaults to ~/.vanta-cli/oauth-token.json",
+      "OAuth access-token cache path; defaults to ~/.config/vanta/oauth-token-cache.json",
+    )
+    .option(
+      "--credentials-file <path>",
+      "MCP-style OAuth credentials JSON file; defaults to ~/.config/vanta/credentials.json",
     )
     .option("--base-url <url>", "Vanta API base URL", "https://api.vanta.com")
     .showHelpAfterError()
@@ -169,6 +173,7 @@ function createService(
     scope?: string;
     baseUrl?: string;
     tokenCachePath?: string;
+    credentialsFile?: string;
   }>();
   const config = loadVantaConfig({
     clientId: options.clientId,
@@ -176,6 +181,7 @@ function createService(
     scope: options.scope,
     baseUrl: options.baseUrl,
     tokenCachePath: options.tokenCachePath,
+    credentialsFilePath: options.credentialsFile,
   });
   return createVantaTestService(
     new VantaApiClient(
