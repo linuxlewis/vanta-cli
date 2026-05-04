@@ -2,6 +2,13 @@
 
 ## Production Global Install
 
+Use Node 24 LTS, the current Active LTS line:
+
+```bash
+nvm install 24
+nvm use 24
+```
+
 Install the public GitHub repository as a global CLI:
 
 ```bash

@@ -13,7 +13,7 @@ This repository follows the agent-first template conventions, trimmed for a Type
 
 ## Stack
 
-pnpm · TypeScript · Commander · Zod · Vitest · Biome
+Node 24 LTS · pnpm · TypeScript · Commander · Zod · Vitest · Biome
 
 ## Key Rules
 

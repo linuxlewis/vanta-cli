@@ -4,6 +4,13 @@ A TypeScript CLI for Vanta test workflows, built from the agent-first template s
 
 ## Global Installation
 
+Use Node 24 LTS:
+
+```bash
+nvm install 24
+nvm use 24
+```
+
 ```bash
 npm install --global github:linuxlewis/vanta-cli
 ```

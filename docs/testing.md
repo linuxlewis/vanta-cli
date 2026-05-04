@@ -3,6 +3,7 @@
 ## Commands
 
 ```bash
+nvm use 24
 pnpm install
 pnpm lint
 pnpm test
