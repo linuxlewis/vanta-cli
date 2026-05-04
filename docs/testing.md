@@ -1,0 +1,18 @@
+# Testing
+
+## Commands
+
+```bash
+pnpm install
+pnpm lint
+pnpm test
+pnpm build
+```
+
+## Coverage Intent
+
+- `types/` tests validate Vanta response schemas.
+- `config/` tests validate token and base URL parsing.
+- `repo/` tests mock `fetch` and assert Vanta endpoint paths, methods, query parameters, and payloads.
+- `service/` tests cover dry-run and batch entity deactivation behavior.
+- `runtime/` tests cover CLI command wiring without calling the real Vanta API.
