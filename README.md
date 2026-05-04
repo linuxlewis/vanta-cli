@@ -2,17 +2,54 @@
 
 A TypeScript CLI for Vanta test workflows, built from the agent-first template style.
 
-## Setup
+## Global Installation
+
+```bash
+npm install --global github:linuxlewis/vanta-cli
+```
+
+Confirm the executable is available:
+
+```bash
+vanta-cli --help
+```
+
+To update the global install later, rerun the install command:
+
+```bash
+npm install --global github:linuxlewis/vanta-cli
+```
+
+## Local Checkout Installation
+
+Use this when you are developing the CLI from this repository:
 
 ```bash
 pnpm install
 pnpm build
+npm install --global .
 ```
 
-Set your Vanta API token:
+After changing the source, rebuild before using the global binary again:
+
+```bash
+pnpm build
+```
+
+## Authentication
+
+Set your Vanta API token in the environment used by your shell and agents:
 
 ```bash
 export VANTA_API_TOKEN=vat_YOUR_TOKEN
+```
+
+For a persistent setup, add that export to your shell profile or agent environment bootstrap. The CLI sends the token as `Authorization: Bearer <token>` on Vanta API requests.
+
+You can also pass the token per command:
+
+```bash
+vanta-cli --token vat_YOUR_TOKEN tests list
 ```
 
 ## Commands
@@ -20,19 +57,19 @@ export VANTA_API_TOKEN=vat_YOUR_TOKEN
 List tests:
 
 ```bash
-pnpm dev tests list --status NEEDS_ATTENTION --category INFRASTRUCTURE
+vanta-cli tests list --status NEEDS_ATTENTION --category INFRASTRUCTURE
 ```
 
 List failing entities for a test:
 
 ```bash
-pnpm dev tests entities --test-id inventory-list-descriptions --status FAILING
+vanta-cli tests entities --test-id inventory-list-descriptions --status FAILING
 ```
 
 Preview entity deactivation:
 
 ```bash
-pnpm dev tests deactivate-entities \
+vanta-cli tests deactivate-entities \
   --test-id inventory-list-descriptions \
   --entity-id entity_123 \
   --reason "Accepted risk for legacy bucket" \
@@ -42,7 +79,7 @@ pnpm dev tests deactivate-entities \
 Deactivate one or more entities:
 
 ```bash
-pnpm dev tests deactivate-entities \
+vanta-cli tests deactivate-entities \
   --test-id inventory-list-descriptions \
   --entity-id entity_123 \
   --entity-id entity_456 \

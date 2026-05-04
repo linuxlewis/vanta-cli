@@ -7,6 +7,7 @@ pnpm install
 pnpm lint
 pnpm test
 pnpm build
+node dist/cli.js --help
 ```
 
 ## Coverage Intent
