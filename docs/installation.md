@@ -12,7 +12,7 @@ nvm use 24
 Install the public GitHub repository as a global CLI:
 
 ```bash
-npm install --global github:linuxlewis/vanta-cli
+npm install --global https://github.com/linuxlewis/vanta-cli/archive/main.tar.gz
 ```
 
 Verify that the binary is on `PATH`:

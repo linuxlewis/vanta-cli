@@ -12,7 +12,7 @@ nvm use 24
 ```
 
 ```bash
-npm install --global github:linuxlewis/vanta-cli
+npm install --global https://github.com/linuxlewis/vanta-cli/archive/main.tar.gz
 ```
 
 Confirm the executable is available:
@@ -24,7 +24,7 @@ vanta-cli --help
 To update the global install later, rerun the install command:
 
 ```bash
-npm install --global github:linuxlewis/vanta-cli
+npm install --global https://github.com/linuxlewis/vanta-cli/archive/main.tar.gz
 ```
 
 ## Local Checkout Installation
