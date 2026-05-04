@@ -1,5 +1,6 @@
 import { Command } from "commander";
 import { loadVantaConfig } from "../config/config.js";
+import { createOAuthAccessTokenProvider } from "../repo/oauth-token-provider.js";
 import { VantaApiClient } from "../repo/vanta-api-client.js";
 import {
   type VantaTestService,
@@ -35,7 +36,23 @@ export function createVantaCli(dependencies: CliDependencies = {}): Command {
   program
     .name("vanta-cli")
     .description("Automation-friendly CLI for Vanta test workflows")
-    .option("--token <token>", "Vanta API token; defaults to VANTA_API_TOKEN")
+    .option(
+      "--client-id <clientId>",
+      "Vanta OAuth client ID; defaults to VANTA_CLIENT_ID",
+    )
+    .option(
+      "--client-secret <clientSecret>",
+      "Vanta OAuth client secret; defaults to VANTA_CLIENT_SECRET",
+    )
+    .option(
+      "--scope <scope>",
+      "OAuth scope string",
+      "vanta-api.all:read vanta-api.all:write",
+    )
+    .option(
+      "--token-cache-path <path>",
+      "OAuth access-token cache path; defaults to ~/.vanta-cli/oauth-token.json",
+    )
     .option("--base-url <url>", "Vanta API base URL", "https://api.vanta.com")
     .showHelpAfterError()
     .configureOutput({
@@ -146,12 +163,27 @@ function createService(
   program: Command,
   fetchFn?: typeof fetch,
 ): VantaTestService {
-  const options = program.opts<{ token?: string; baseUrl?: string }>();
+  const options = program.opts<{
+    clientId?: string;
+    clientSecret?: string;
+    scope?: string;
+    baseUrl?: string;
+    tokenCachePath?: string;
+  }>();
   const config = loadVantaConfig({
-    token: options.token,
+    clientId: options.clientId,
+    clientSecret: options.clientSecret,
+    scope: options.scope,
     baseUrl: options.baseUrl,
+    tokenCachePath: options.tokenCachePath,
   });
-  return createVantaTestService(new VantaApiClient(config, fetchFn));
+  return createVantaTestService(
+    new VantaApiClient(
+      config,
+      createOAuthAccessTokenProvider(config, fetchFn),
+      fetchFn,
+    ),
+  );
 }
 
 function writeJson(output: OutputWriter, value: unknown): void {

@@ -26,7 +26,8 @@ Vanta's public API deactivates test entities, not whole tests. This CLI therefor
 
 ## Boundary Rules
 
-- API tokens are read from `--token` or `VANTA_API_TOKEN`.
+- OAuth client credentials are read from CLI options or `VANTA_CLIENT_ID` and `VANTA_CLIENT_SECRET`.
+- OAuth access tokens are requested with the client-credentials grant and cached on disk until shortly before expiration.
 - The API base URL defaults to `https://api.vanta.com`, with `--base-url` for testing or proxies.
 - Network responses are validated before entering service logic.
 - `--dry-run` must never perform deactivation requests.

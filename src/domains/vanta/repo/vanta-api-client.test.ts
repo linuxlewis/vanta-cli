@@ -16,7 +16,8 @@ describe("VantaApiClient", () => {
       jsonResponse({ results: { data: [{ id: "test_1" }] } }),
     );
     const client = new VantaApiClient(
-      { token: "vat_token", baseUrl: "https://api.vanta.test" },
+      { baseUrl: "https://api.vanta.test" },
+      async () => "vat_token",
       fetchFn as unknown as FetchFn,
     );
 
@@ -41,7 +42,8 @@ describe("VantaApiClient", () => {
       jsonResponse({ results: { data: [{ id: "entity_1" }] } }),
     );
     const client = new VantaApiClient(
-      { token: "vat_token", baseUrl: "https://api.vanta.test" },
+      { baseUrl: "https://api.vanta.test" },
+      async () => "vat_token",
       fetchFn as unknown as FetchFn,
     );
 
@@ -59,7 +61,8 @@ describe("VantaApiClient", () => {
   it("deactivates a test entity with a reason and optional date", async () => {
     const fetchFn = vi.fn(async () => new Response(null, { status: 202 }));
     const client = new VantaApiClient(
-      { token: "vat_token", baseUrl: "https://api.vanta.test" },
+      { baseUrl: "https://api.vanta.test" },
+      async () => "vat_token",
       fetchFn as unknown as FetchFn,
     );
 
@@ -84,7 +87,8 @@ describe("VantaApiClient", () => {
   it("surfaces Vanta error responses", async () => {
     const fetchFn = vi.fn(async () => new Response("nope", { status: 401 }));
     const client = new VantaApiClient(
-      { token: "bad", baseUrl: "https://api.vanta.test" },
+      { baseUrl: "https://api.vanta.test" },
+      async () => "bad",
       fetchFn as unknown as FetchFn,
     );
 

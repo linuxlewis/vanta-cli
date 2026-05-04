@@ -83,6 +83,18 @@ export const DeactivateTestEntityRequestSchema = z.object({
   deactivateUntilDate: z.string().datetime().optional(),
 });
 
+export const OAuthTokenResponseSchema = z.object({
+  access_token: z.string().min(1),
+  expires_in: z.number().int().positive(),
+  token_type: z.string().min(1),
+});
+
+export const OAuthTokenCacheSchema = z.object({
+  accessToken: z.string().min(1),
+  expiresAt: z.number().int().positive(),
+  tokenType: z.string().min(1),
+});
+
 export type TestStatus = z.infer<typeof TestStatusSchema>;
 export type TestCategory = z.infer<typeof TestCategorySchema>;
 export type EntityStatus = z.infer<typeof EntityStatusSchema>;
@@ -96,3 +108,5 @@ export type ListTestEntitiesResponse = z.infer<
 export type DeactivateTestEntityRequest = z.infer<
   typeof DeactivateTestEntityRequestSchema
 >;
+export type OAuthTokenResponse = z.infer<typeof OAuthTokenResponseSchema>;
+export type OAuthTokenCache = z.infer<typeof OAuthTokenCacheSchema>;

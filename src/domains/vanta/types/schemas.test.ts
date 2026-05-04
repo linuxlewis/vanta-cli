@@ -3,6 +3,7 @@ import {
   DeactivateTestEntityRequestSchema,
   ListTestEntitiesResponseSchema,
   ListTestsResponseSchema,
+  OAuthTokenResponseSchema,
 } from "./schemas.js";
 
 describe("Vanta schemas", () => {
@@ -33,5 +34,15 @@ describe("Vanta schemas", () => {
     expect(() =>
       DeactivateTestEntityRequestSchema.parse({ deactivateReason: "" }),
     ).toThrow();
+  });
+
+  it("parses an OAuth token response", () => {
+    const parsed = OAuthTokenResponseSchema.parse({
+      access_token: "vat_token",
+      expires_in: 3599,
+      token_type: "Bearer",
+    });
+
+    expect(parsed.access_token).toBe("vat_token");
   });
 });

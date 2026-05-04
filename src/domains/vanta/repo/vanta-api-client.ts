@@ -11,6 +11,7 @@ import {
   type TestCategory,
   type TestStatus,
 } from "../types/schemas.js";
+import type { AccessTokenProvider } from "./oauth-token-provider.js";
 
 export type FetchFn = typeof fetch;
 
@@ -47,12 +48,16 @@ export class VantaApiError extends Error {
 export class VantaApiClient {
   private readonly baseUrl: URL;
   private readonly fetchFn: FetchFn;
-  private readonly token: string;
+  private readonly accessTokenProvider: AccessTokenProvider;
 
-  constructor(config: VantaConfig, fetchFn: FetchFn = fetch) {
+  constructor(
+    config: Pick<VantaConfig, "baseUrl">,
+    accessTokenProvider: AccessTokenProvider,
+    fetchFn: FetchFn = fetch,
+  ) {
     this.baseUrl = new URL(config.baseUrl);
     this.fetchFn = fetchFn;
-    this.token = config.token;
+    this.accessTokenProvider = accessTokenProvider;
   }
 
   async listTests(params: ListTestsParams = {}): Promise<ListTestsResponse> {
@@ -94,11 +99,12 @@ export class VantaApiClient {
     schema: z.ZodType<T>,
     init: RequestInit = {},
   ): Promise<T> {
+    const accessToken = await this.accessTokenProvider();
     const response = await this.fetchFn(url, {
       ...init,
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${accessToken}`,
         ...(init.body ? { "Content-Type": "application/json" } : {}),
         ...init.headers,
       },

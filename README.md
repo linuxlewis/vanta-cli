@@ -36,20 +36,27 @@ After changing the source, rebuild before using the global binary again:
 pnpm build
 ```
 
-## Authentication
+## OAuth Authentication
 
-Set your Vanta API token in the environment used by your shell and agents:
+Create a **Manage Vanta** application in Vanta's Developer Console, generate its OAuth client secret, then set the credentials in the environment used by your shell and agents:
 
 ```bash
-export VANTA_API_TOKEN=vat_YOUR_TOKEN
+export VANTA_CLIENT_ID=vci_YOUR_CLIENT_ID
+export VANTA_CLIENT_SECRET=vcs_YOUR_CLIENT_SECRET
+export VANTA_OAUTH_SCOPE="vanta-api.all:read vanta-api.all:write"
 ```
 
-For a persistent setup, add that export to your shell profile or agent environment bootstrap. The CLI sends the token as `Authorization: Bearer <token>` on Vanta API requests.
+For a persistent setup, add those exports to your shell profile or agent environment bootstrap.
 
-You can also pass the token per command:
+The CLI uses Vanta's OAuth client-credentials flow against `https://api.vanta.com/oauth/token`, then sends the returned access token as `Authorization: Bearer <token>` on API requests. Access tokens are cached at `~/.vanta-cli/oauth-token.json` until shortly before expiration so repeated agent calls do not request and revoke a new Vanta token each time.
+
+You can also pass OAuth credentials per command:
 
 ```bash
-vanta-cli --token vat_YOUR_TOKEN tests list
+vanta-cli \
+  --client-id vci_YOUR_CLIENT_ID \
+  --client-secret vcs_YOUR_CLIENT_SECRET \
+  tests list
 ```
 
 ## Commands
@@ -93,6 +100,7 @@ The Vanta API deactivates individual test entities with `POST /v1/tests/{testId}
 
 Relevant Vanta docs:
 
+- [Authentication](https://developer.vanta.com/docs/api-access-setup)
 - [List tests](https://developer.vanta.com/reference/listtests)
 - [Get test entities by test ID](https://developer.vanta.com/reference/gettestentities)
 - [Deactivate test entity](https://developer.vanta.com/reference/deactivatetestentity)
