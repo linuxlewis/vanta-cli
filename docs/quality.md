@@ -7,6 +7,8 @@
 - OAuth token responses and token cache files are parsed with Zod.
 - Deactivation tests use mocked fetch calls and do not contact Vanta.
 - `--dry-run` is covered by service tests and skips the POST request.
+- Document evidence upload tests use mocked fetch calls and local temp files only.
+- Document upload `--dry-run` skips upload and submit requests.
 
 ## Known Gaps
 

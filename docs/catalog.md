@@ -7,3 +7,4 @@
 | [installation.md](./installation.md) | Global installation and agent environment setup |
 | [testing.md](./testing.md) | Local validation commands |
 | [quality.md](./quality.md) | Quality status and known gaps |
+| [control-evidence-upload-plan.md](./control-evidence-upload-plan.md) | Plan for uploading document and screenshot evidence to controls |

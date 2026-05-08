@@ -24,6 +24,15 @@ Vanta's public API deactivates test entities, not whole tests. This CLI therefor
 2. Listing a test's entities with `GET /v1/tests/{testId}/entities`.
 3. Deactivating selected entities with `POST /v1/tests/{testId}/entities/{entityId}/deactivate`.
 
+## Vanta Control Evidence Model
+
+Vanta uploads control evidence through document requests, not directly to controls. This CLI therefore supports:
+
+1. Finding controls with `GET /v1/controls`.
+2. Listing a control's document requests with `GET /v1/controls/{controlId}/documents`.
+3. Uploading document or screenshot evidence with `POST /v1/documents/{documentId}/uploads`.
+4. Optionally submitting the document collection with `POST /v1/documents/{documentId}/submit`.
+
 ## Boundary Rules
 
 - OAuth client credentials are read from an MCP-style JSON file at `~/.config/vanta/credentials.json` by default.
@@ -33,3 +42,4 @@ Vanta's public API deactivates test entities, not whole tests. This CLI therefor
 - The API base URL defaults to `https://api.vanta.com`, with `--base-url` for testing or proxies.
 - Network responses are validated before entering service logic.
 - `--dry-run` must never perform deactivation requests.
+- `--dry-run` must never upload or submit document evidence.

@@ -73,6 +73,73 @@ export const DeactivateTestEntityRequestSchema = z.object({
     deactivateReason: z.string().min(1),
     deactivateUntilDate: z.string().datetime().optional(),
 });
+export const DocumentStatusSchema = z.enum([
+    "Needs document",
+    "Needs update",
+    "Not relevant",
+    "OK",
+]);
+export const ControlOwnerSchema = z
+    .object({
+    id: z.string(),
+    emailAddress: z.string().nullable().optional(),
+    displayName: z.string().nullable().optional(),
+})
+    .passthrough();
+export const VantaControlSchema = z
+    .object({
+    id: z.string(),
+    externalId: z.string().nullable().optional(),
+    name: z.string().nullable().optional(),
+    description: z.string().nullable().optional(),
+    source: z.string().nullable().optional(),
+    domains: z.array(z.string()).optional(),
+    owner: ControlOwnerSchema.nullable().optional(),
+})
+    .passthrough();
+export const ListControlsResponseSchema = z.object({
+    results: z.object({
+        pageInfo: PageInfoSchema.optional(),
+        data: z.array(VantaControlSchema),
+    }),
+});
+export const SetControlOwnerRequestSchema = z.object({
+    userId: z.string().min(1),
+});
+export const VantaDocumentSchema = z
+    .object({
+    id: z.string(),
+    title: z.string().nullable().optional(),
+    description: z.string().nullable().optional(),
+    category: z.string().nullable().optional(),
+    isSensitive: z.boolean().optional(),
+    ownerId: z.string().nullable().optional(),
+    overallStatus: DocumentStatusSchema.or(z.string()).optional(),
+    uploadStatusDate: z.string().nullable().optional(),
+    url: z.string().nullable().optional(),
+})
+    .passthrough();
+export const ListDocumentsResponseSchema = z.object({
+    results: z.object({
+        pageInfo: PageInfoSchema.optional(),
+        data: z.array(VantaDocumentSchema),
+    }),
+});
+export const UploadDocumentFileResponseSchema = z
+    .object({
+    id: z.string(),
+    creationDate: z.string().nullable().optional(),
+    updatedDate: z.string().nullable().optional(),
+    deletionDate: z.string().nullable().optional(),
+    description: z.string().nullable().optional(),
+    effectiveDate: z.string().nullable().optional(),
+    fileName: z.string().nullable().optional(),
+    title: z.string().nullable().optional(),
+    mimeType: z.string().nullable().optional(),
+    url: z.string().nullable().optional(),
+    uploadedByUserId: z.string().nullable().optional(),
+})
+    .passthrough();
 export const OAuthTokenResponseSchema = z.object({
     access_token: z.string().min(1),
     expires_in: z.number().int().positive(),

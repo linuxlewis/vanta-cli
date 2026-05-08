@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DeactivateTestEntityRequestSchema, ListTestEntitiesResponseSchema, ListTestsResponseSchema, } from "../types/schemas.js";
+import { DeactivateTestEntityRequestSchema, ListControlsResponseSchema, ListDocumentsResponseSchema, ListTestEntitiesResponseSchema, ListTestsResponseSchema, SetControlOwnerRequestSchema, UploadDocumentFileResponseSchema, } from "../types/schemas.js";
 export class VantaApiError extends Error {
     status;
     body;
@@ -36,16 +36,59 @@ export class VantaApiClient {
             body: JSON.stringify(parsedBody),
         });
     }
+    async listControls(params = {}) {
+        const url = this.url("/v1/controls", params);
+        return this.request(url, ListControlsResponseSchema);
+    }
+    async setControlOwner(controlId, body) {
+        const parsedBody = SetControlOwnerRequestSchema.parse(body);
+        const url = this.url(`/v1/controls/${encodeURIComponent(controlId)}/set-owner`);
+        await this.request(url, z.unknown(), {
+            method: "POST",
+            body: JSON.stringify(parsedBody),
+        });
+    }
+    async listDocuments(params = {}) {
+        const url = this.url("/v1/documents", params);
+        return this.request(url, ListDocumentsResponseSchema);
+    }
+    async listControlDocuments(params) {
+        const { controlId, ...query } = params;
+        const url = this.url(`/v1/controls/${encodeURIComponent(controlId)}/documents`, query);
+        return this.request(url, ListDocumentsResponseSchema);
+    }
+    async uploadDocumentFile(documentId, input) {
+        const form = new FormData();
+        form.append("file", input.file, input.fileName);
+        if (input.effectiveAtDate) {
+            form.append("effectiveAtDate", input.effectiveAtDate);
+        }
+        if (input.description) {
+            form.append("description", input.description);
+        }
+        const url = this.url(`/v1/documents/${encodeURIComponent(documentId)}/uploads`);
+        return this.request(url, UploadDocumentFileResponseSchema, {
+            method: "POST",
+            body: form,
+        });
+    }
+    async submitDocument(documentId) {
+        const url = this.url(`/v1/documents/${encodeURIComponent(documentId)}/submit`);
+        await this.request(url, z.unknown(), {
+            method: "POST",
+        });
+    }
     async request(url, schema, init = {}) {
         const accessToken = await this.accessTokenProvider();
+        const headers = new Headers(init.headers);
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", `Bearer ${accessToken}`);
+        if (shouldSetJsonContentType(init.body) && !headers.has("Content-Type")) {
+            headers.set("Content-Type", "application/json");
+        }
         const response = await this.fetchFn(url, {
             ...init,
-            headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${accessToken}`,
-                ...(init.body ? { "Content-Type": "application/json" } : {}),
-                ...init.headers,
-            },
+            headers,
         });
         if (!response.ok) {
             const body = await response.text();
@@ -59,10 +102,21 @@ export class VantaApiClient {
     url(pathname, query = {}) {
         const url = new URL(pathname, this.baseUrl);
         for (const [key, value] of Object.entries(query)) {
-            if (value !== undefined && value !== "") {
+            if (value === undefined || value === "") {
+                continue;
+            }
+            if (Array.isArray(value)) {
+                for (const item of value) {
+                    url.searchParams.append(key, String(item));
+                }
+            }
+            else {
                 url.searchParams.set(key, String(value));
             }
         }
         return url;
     }
+}
+function shouldSetJsonContentType(body) {
+    return body !== undefined && body !== null && !(body instanceof FormData);
 }

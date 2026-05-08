@@ -115,9 +115,51 @@ vanta-cli tests deactivate-entities \
   --until 2026-12-31T00:00:00.000Z
 ```
 
+List controls:
+
+```bash
+vanta-cli controls list --framework soc2 --page-size 100
+```
+
+List document requests attached to a control:
+
+```bash
+vanta-cli controls documents --control-id AST-78 --page-size 100
+```
+
+List document requests directly:
+
+```bash
+vanta-cli documents list --framework soc2 --status "Needs document"
+```
+
+Preview a document or screenshot evidence upload:
+
+```bash
+vanta-cli documents upload \
+  --document-id access-requests \
+  --file ./evidence/access-review.png \
+  --description "Quarterly access review screenshot" \
+  --dry-run
+```
+
+Upload and submit evidence for a control:
+
+```bash
+vanta-cli controls upload-evidence \
+  --control-id AST-78 \
+  --document-id access-requests \
+  --file ./evidence/access-review.png \
+  --description "Quarterly access review screenshot" \
+  --effective-at 2026-05-06T00:00:00.000Z \
+  --submit
+```
+
 ## Vanta API Scope
 
 The Vanta API deactivates individual test entities with `POST /v1/tests/{testId}/entities/{entityId}/deactivate`. Use the list commands first to find the test ID and failing entity IDs.
+
+Vanta uploads control evidence through document requests. Use `controls documents` or `documents list` to find the document ID, then upload a file with `documents upload` or `controls upload-evidence`. Screenshot evidence uses the same upload path as document evidence.
 
 Relevant Vanta docs:
 
@@ -126,3 +168,8 @@ Relevant Vanta docs:
 - [List tests](https://developer.vanta.com/reference/listtests)
 - [Get test entities by test ID](https://developer.vanta.com/reference/gettestentities)
 - [Deactivate test entity](https://developer.vanta.com/reference/deactivatetestentity)
+- [List controls](https://developer.vanta.com/reference/listcontrols)
+- [List a control's documents](https://developer.vanta.com/reference/listdocumentsforcontrol)
+- [List documents](https://developer.vanta.com/reference/listdocuments)
+- [Upload file for document](https://developer.vanta.com/reference/uploadfilefordocument)
+- [Submit document collection](https://developer.vanta.com/reference/submitdocumentcollection)

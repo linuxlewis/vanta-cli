@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   DeactivateTestEntityRequestSchema,
+  ListControlsResponseSchema,
+  ListDocumentsResponseSchema,
   ListTestEntitiesResponseSchema,
   ListTestsResponseSchema,
   OAuthTokenResponseSchema,
+  SetControlOwnerRequestSchema,
+  UploadDocumentFileResponseSchema,
 } from "./schemas.js";
 
 describe("Vanta schemas", () => {
@@ -34,6 +38,56 @@ describe("Vanta schemas", () => {
     expect(() =>
       DeactivateTestEntityRequestSchema.parse({ deactivateReason: "" }),
     ).toThrow();
+  });
+
+  it("parses a list controls response", () => {
+    const parsed = ListControlsResponseSchema.parse({
+      results: {
+        data: [
+          {
+            id: "lcckzq29",
+            externalId: "AST-78",
+            name: "System Component Inventory",
+            domains: ["ASSET_MANAGEMENT"],
+            owner: null,
+          },
+        ],
+      },
+    });
+
+    expect(parsed.results.data[0]?.externalId).toBe("AST-78");
+  });
+
+  it("requires a userId on set-owner requests", () => {
+    expect(() => SetControlOwnerRequestSchema.parse({ userId: "" })).toThrow();
+  });
+
+  it("parses a list documents response", () => {
+    const parsed = ListDocumentsResponseSchema.parse({
+      results: {
+        data: [
+          {
+            id: "access-requests",
+            title: "Access request ticket and history",
+            overallStatus: "Needs document",
+            url: "https://app.vanta.com/documents/access-requests",
+          },
+        ],
+      },
+    });
+
+    expect(parsed.results.data[0]?.overallStatus).toBe("Needs document");
+  });
+
+  it("parses an uploaded document file response", () => {
+    const parsed = UploadDocumentFileResponseSchema.parse({
+      id: "66a935ff0dfddd9e7c568558",
+      fileName: "access-review.png",
+      mimeType: "image/png",
+      url: "https://app.vanta.com/doc/Manual%20Evidence",
+    });
+
+    expect(parsed.fileName).toBe("access-review.png");
   });
 
   it("parses an OAuth token response", () => {
